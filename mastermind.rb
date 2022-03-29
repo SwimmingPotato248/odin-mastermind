@@ -30,12 +30,12 @@ class Mastermind
             end
         end
         puts "Keys - #{key}"
-        if key == ["black", "black", "black", "black"]
+        if @guess == @code
             @correct = true
         end
     end
 
-    def play_game
+    def play_guesser
         while !@correct && @current_turn < @turns
             @current_turn += 1
             puts "Turn #{@current_turn}"
@@ -53,7 +53,26 @@ class Mastermind
             puts "The code is #{@code}"
         end
     end
+
+    def play_coder
+        puts "Enter your code"
+        puts "Possible color: #{CODES}"
+        @code = gets.chomp.split
+        while !@correct && @current_turn < @turns
+            @current_turn += 1
+            guess = []
+            4.times { guess.push(CODES[rand(6)]) }
+            puts "#{guess}"
+            guess(guess)
+            check_guess()
+        end
+        if @correct
+            puts "The computer guessed your code after #{current_turn} turns"
+        else 
+            puts "The computer could not guessed your code"
+        end
+    end
 end
 
 game = Mastermind.new
-game.play_game
+game.play_coder
