@@ -7,13 +7,11 @@ class Mastermind
         4.times { @code.push(CODES[rand(6)]) }
         @correct = false
         @current_turn = 0
+        @key = Array.new(4, "none")
+        @guess = []
     end
 
-    def guess(guess)
-        @guess = guess
-    end
-
-    def check_guess
+    def check_guess(guess)
         key = Array.new(4, "none")
         matched = Array.new(4, false)
         4.times do |i|
@@ -33,6 +31,7 @@ class Mastermind
         if @guess == @code
             @correct = true
         end
+        @key = key
     end
 
     def play_guesser
@@ -41,10 +40,9 @@ class Mastermind
             puts "Turn #{@current_turn}"
             puts "Enter your guesses"
             puts "Possible color: #{CODES}"
-            guess = gets.chomp.split
-            puts "#{guess}"
-            guess(guess)
-            check_guess()
+            @guess = gets.chomp.split
+            puts "#{@guess}"
+            check_guess(@guess)
         end
         if @correct
             puts "Your guess is correct!! You guess it after #{@current_turn} turns"
@@ -60,19 +58,21 @@ class Mastermind
         @code = gets.chomp.split
         while !@correct && @current_turn < @turns
             @current_turn += 1
-            guess = []
-            4.times { guess.push(CODES[rand(6)]) }
-            puts "#{guess}"
-            guess(guess)
-            check_guess()
+            4.times do |i|
+                if @key[i] != "black"
+                    @guess[i] = (CODES[rand(6)]) 
+                end
+            end
+            puts "#{@guess}"
+            check_guess(@guess)
         end
         if @correct
-            puts "The computer guessed your code after #{current_turn} turns"
+            puts "The computer guessed your code after #{@current_turn} turns"
         else 
             puts "The computer could not guessed your code"
         end
     end
 end
 
-game = Mastermind.new
+game = Mastermind.new(20)
 game.play_coder
